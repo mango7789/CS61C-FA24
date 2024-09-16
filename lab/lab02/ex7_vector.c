@@ -1,6 +1,6 @@
 /* Include the system headers we need */
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /* Include our header */
 #include "ex7_vector.h"
@@ -40,40 +40,39 @@ vector_t *bad_vector_new() {
 /* TODO: uncomment the code that is preceded by // */
 vector_t *vector_new() {
     /* Declare what this function will return */
-    // vector_t *retval;
+    vector_t *retval;
 
     /* First, we need to allocate memory on the heap for the struct */
-    // retval = /* YOUR CODE HERE */
+    retval = malloc(sizeof(vector_t));
 
     /* Check our return value to make sure we got memory */
-    // if (/* YOUR CODE HERE */) {
-    //     allocation_failed();
-    // }
+    if (retval == NULL) {
+        allocation_failed();
+    }
 
     /* Now we need to initialize our data.
        Since retval->data should be able to dynamically grow,
        what do you need to do? */
-    // retval->size = /* YOUR CODE HERE */;
-    // retval->data = /* YOUR CODE HERE */;
+    retval->size = 1;
+    retval->data = malloc(retval->size * sizeof(int));
 
     /* Check the data attribute of our vector to make sure we got memory */
-    // if (/* YOUR CODE HERE */) {
-    //     free(retval);				//Why is this line necessary?
-    //     allocation_failed();
-    // }
+    if (retval->data == NULL) {
+        free(retval);  // Why is this line necessary?
+        allocation_failed();
+    }
 
     /* Complete the initialization by setting the single component to zero */
-    // /* YOUR CODE HERE */ = 0;
+    retval->data[0] = 0;
 
     /* and return... */
-    return NULL; /* UPDATE RETURN VALUE */
+    return retval; /* UPDATE RETURN VALUE */
 }
 
 /* Return the value at the specified location/component "loc" of the vector */
 int vector_get(vector_t *v, size_t loc) {
-
     /* If we are passed a NULL pointer for our vector, complain about it and exit. */
-    if(v == NULL) {
+    if (v == NULL) {
         fprintf(stderr, "vector_get: passed a NULL vector.\n");
         abort();
     }
@@ -82,16 +81,21 @@ int vector_get(vector_t *v, size_t loc) {
      * Otherwise, return what is in the passed location.
      */
     /* YOUR CODE HERE */
+    if (loc + 1 <= v->size) {
+        return *(v->data + loc);
+    }
+
     return 0;
 }
 
 /* Free up the memory allocated for the passed vector.
    Remember, you need to free up ALL the memory that was allocated. */
 void vector_delete(vector_t *v) {
-    /* YOUR CODE HERE */
+    free(v->data);
+    free(v);
 }
 
-/* Set a value in the vector, allocating additional memory if necessary. 
+/* Set a value in the vector, allocating additional memory if necessary.
    If the extra memory allocation fails, call allocation_failed(). */
 void vector_set(vector_t *v, size_t loc, int value) {
     /* What do you need to do if the location is greater than the size we have
@@ -99,4 +103,20 @@ void vector_set(vector_t *v, size_t loc, int value) {
      */
 
     /* YOUR CODE HERE */
+    if (loc > v->size) {
+        int *curr_data = v->data;
+        v->data = malloc((loc + 1) * sizeof(int));
+        for (int i = 0; i < v->size; i++) {
+            v->data[i] = curr_data[i];
+        }
+        for (int i = v->size; i < loc; i++) {
+            v->data[i] = 0;
+        }
+        v->data[loc] = value;
+
+        v->size = loc + 1;
+        free(curr_data);
+    } else {
+        v->data[loc] = value;
+    }
 }
