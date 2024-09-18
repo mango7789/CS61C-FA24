@@ -98,11 +98,17 @@ bool test_is_vowel() {
 
 bool test_is_tail() {
   // TODO: Implement this function.
+  assert_equals_bool("The test of 'a' is tail failed!", true, is_tail('a'));
+  assert_equals_bool("The test of 'b' is not tail failed!", false, is_tail('b'));
   return true;
 }
 
 bool test_is_head() {
   // TODO: Implement this function.
+  assert_equals_bool("The test of 'x' is head failed!", true, is_tail('x'));
+  assert_equals_bool("The test of 'W' is head failed!", true, is_tail('W'));
+  assert_equals_bool("The test of 'w' is not head failed!", false, is_tail('w'));
+  assert_equals_bool("The test of 'B' is not head failed!", false, is_tail('B'));
   return true;
 }
 
