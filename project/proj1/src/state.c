@@ -68,7 +68,9 @@ void free_state(game_state_t *state) {
     }
     free(board);
     // Free the snakes
-    free(state->snakes);
+    if (state->snakes != NULL) {
+        free(state->snakes);
+    }
     // Free the game state
     free(state);
     return;
@@ -233,11 +235,8 @@ static char next_square(game_state_t *state, unsigned int snum) {
     // TODO: Implement this function.
     snake_t cur_snake = state->snakes[snum];
     char snake_head = get_board_at(state, cur_snake.head_row, cur_snake.head_col);
-    return get_board_at(
-        state, 
-        get_next_row(cur_snake.head_row, snake_head),
-        get_next_col(cur_snake.head_col, snake_head)
-    );
+    return get_board_at(state, get_next_row(cur_snake.head_row, snake_head),
+                        get_next_col(cur_snake.head_col, snake_head));
 }
 
 /*
@@ -317,7 +316,7 @@ void update_state(game_state_t *state, int (*add_food)(game_state_t *state)) {
 char *read_line(FILE *fp) {
     // TODO: Implement this function.
     // Allocate memory for the line
-    size_t cols = 260 * sizeof(char);
+    size_t cols = 102400 * sizeof(char);
     char *line = malloc(cols);
     // Gets one line from the fp
     if (fgets(line, cols, fp) == NULL) {
@@ -337,7 +336,7 @@ game_state_t *load_board(FILE *fp) {
     game->num_snakes = 0;
     game->snakes = NULL;
     // Load the board from fp
-    size_t rows = 256 * sizeof(char *);
+    size_t rows = 102400 * sizeof(char *);
     char **board = malloc(rows);
 
     int num_rows = 0;
@@ -381,7 +380,7 @@ static void find_head(game_state_t *state, unsigned int snum) {
 game_state_t *initialize_snakes(game_state_t *state) {
     // TODO: Implement this function.
     // Allocate space for snake array
-    state->snakes = malloc(256 * sizeof(snake_t));
+    state->snakes = malloc(512 * sizeof(snake_t));
     // Find each snake in the board
     unsigned int num_snakes = 0;
     for (int row = 0; row < state->num_rows; row++) {
@@ -400,6 +399,11 @@ game_state_t *initialize_snakes(game_state_t *state) {
     }
     // Reallocate space for snake array
     state->num_snakes = num_snakes;
-    realloc(state->snakes, state->num_snakes * sizeof(snake_t));
+    if (num_snakes == 0) {
+        free(state->snakes);
+        state->snakes = NULL;
+    } else {
+        realloc(state->snakes, state->num_snakes * sizeof(snake_t));
+    }
     return state;
 }
