@@ -8,3 +8,4 @@
 - Lecture 6: Floating Point
 - Lecture 7: RISC-V Basics
 - Lecture 8: RISC-V Data Transfer
+- Lecture 9: RISC-V Decision Making
