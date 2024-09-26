@@ -9,3 +9,5 @@
 - Lecture 7: RISC-V Basics
 - Lecture 8: RISC-V Data Transfer
 - Lecture 9: RISC-V Decision Making
+- Lecture 10: RISC-V Procedures
+- Lecture 11: RISC-V Instruction Formats I
