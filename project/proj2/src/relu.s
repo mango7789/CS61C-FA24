@@ -29,6 +29,9 @@ loop_start:
     blt t4, x0, set_zero    # if current element < 0, set to 0
     j loop_continue         # if >= 0, just update index
 
+set_zero:
+    sw x0, 0(t3)            # set the current element to 0
+
 loop_continue:
     addi t0, t0, 1          # increment the index
     j loop_start            # repeat the loop
@@ -39,7 +42,4 @@ loop_end:
 
 except:
     li a0, 36               # set error code 36
-    ecall                   # exit with error code
-
-set_zero:
-    sw x0, 0(t3)            # set the current element to 0
+    j exit                  # exit with error code
