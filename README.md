@@ -12,3 +12,4 @@
 - Lecture 10: RISC-V Procedures
 - Lecture 11: RISC-V Instruction Formats I
 - Lecture 12: RISC-V Instruction Formats II
+- Lecture 13: Compiler, Assembler, Linker, Loader
